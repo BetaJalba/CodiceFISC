@@ -1,0 +1,84 @@
+@font-face {
+    font-family: 'Titillium-Light';
+    src: url('media/files/Titillium-Light.otf') format('truetype');
+  }
+body {
+    font-family: 'Titillium-Light', sans-serif;
+    background-image: url(../../media/images/BG.png);
+    background-size: cover;
+	}
+  
+  .container {
+    width: 500px;
+    margin: 5% auto;
+    background-image: url(../../media/images/tesseraBG.png);
+    background-repeat: no-repeat;
+    background-size: auto;
+    padding: 5px;
+  }
+  
+  header {
+    background-color:transparent;
+    color: midnightblue;
+    text-align: center;
+    padding: 1em 0;
+    margin: -20px -20px 5%;
+    border-radius: 7px;
+  }
+  
+  form {
+    background-color: transparent;
+    padding: 20px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+  } 
+
+  .buttondiv { 
+    margin: 0 0 0 0;
+    background-color: whitesmoke;
+    display: block;
+    overflow: hidden;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .buttondiv:hover{
+    background-color: beige;
+  }
+
+  .divcomunisexy {
+    position: relative;
+
+    min-height: min-content;
+    max-height: 100px;
+    width: 85%;
+    margin: 0 auto;
+
+    overflow: scroll;
+
+    border-radius: 5px;
+  }
+
+.buttondiv::-webkit-scrollbar {
+  display: none;
+}
+
+div{
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+div::-webkit-scrollbar {
+  display: none;
+}

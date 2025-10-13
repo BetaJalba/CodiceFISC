@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autocomplete Names from File</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      background: #f8f8f8;
+    }
+    input, select {
+      width: 20vw;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h2>Bel form formattato con CSS</h2>
+
+  <form method="post" action="index1.php">
+    <input type="text" id="nameInput" name="name" maxlength="50" placeholder="Inserisci nome..." required>
+    <input type="text" id="surnameInput" name="surname" maxlength="50" placeholder="Inserisci nome..." required>
+    <input type="radio" id="maleInput" name="sex" value="M">
+    <label for="maleInput">Maschio</label>
+    <input type="radio" id="femaleInput" name="sex" value="F">
+    <label for="femaleInput">Femmina</label>
+    <input list="names" id="placeInput" name="placeDisplay" placeholder="Inserisci comune..." required>
+    <datalist id="names"></datalist>
+    <input type="hidden" id="placeToken" name="place">
+    <input type="date" id="dateInput" name="birthdate" required>
+    <select id="ateneoInput" name="ateneo" required>
+        <option value="">--Scegli un ateneo--</option>
+        <option value="PD">Università di Padova</option>
+        <option value="VR">Università di Verona</option>
+        <option value="VE">Università di Venezia</option>
+    </select>
+    <input type="text" id="numberInput" name="cap" inputmode="numeric" pattern="\d*" placeholder="Inserisci CAP..." required>
+    <input type="checkbox" id="workerInput">
+    <label for="workerInput">Studente lavoratore</label>
+    <div id="workerText"></div>
+    <input type="submit">
+    <input type="reset">
+  </form>
+
+  <script>
+    let codeMap = {};
+
+    // fetch, quello che uso per importare dati da file, restituisce una promise
+    // "imparate" con una libreria in lua (e un po' di stackOverflow in questo caso) ;)
+    // fetch non funziona con file:// ma solo quando hostato su server
+    // motivo per cui in terza dovevamo caricare il file manualmente (che non facevo)
+    fetch('media/files/lista-codici.txt')
+      .then(resp => resp.text()) // ignora
+      .then(data => {
+        const list = document.getElementById('names');
+        const lines = data.split(/\r?\n/); // regex, il ? messo dopo al \r intendesi zero o una occorrenza dell'escape, windows usa \r\n per line feed, linux usa \n
+        lines.forEach(line => {
+          const [name, code] = line.split(';'); 
+          if (name && code) {
+            let trimmedName = name.trim().toUpperCase();
+            let trimmedCode = code.trim().toUpperCase();
+
+            codeMap[name] = code;
+
+            const option = document.createElement('option');
+            
+            option.value = name;
+            option.innerText = name.trim().toUpperCase();
+
+            list.appendChild(option);
+          }
+        });
+      })
+      .then(() => console.log('Codici caricati.'))
+      .catch(err => console.error('AAAAAAA', err));
+      
+
+    document.getElementById('nameInput').addEventListener('input', function(e){
+        this.value = this.value.replace(/[^a-zA-Z]/g, '');
+    })
+
+    document.getElementById('surnameInput').addEventListener('input', function(e){
+        this.value = this.value.replace(/[^a-zA-Z]/g, '');
+    })
+    
+    document.getElementById('numberInput').addEventListener('input', function(e) {
+        this.value = this.value.replace(/\D/g, '').slice(0, 5); // regex, questa volta toglie tutte le occorrenze di caratteri non numerici
+    });
+
+    document.getElementById('workerInput').addEventListener('change', function(e){
+        const textDiv = document.getElementById('workerText');
+
+        if (this.checked){
+            const textArea = document.createElement('textArea');
+            textArea.setAttribute('required', true);
+            textArea.setAttribute('name', 'work')
+            textDiv.appendChild(textArea);
+        }
+        else
+            textDiv.removeChild(textDiv.firstChild);
+    });
+
+    document.getElementById('placeInput').addEventListener('input', function(e){
+        this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+    })
+
+    document.getElementById('placeInput').addEventListener('blur', function(e){
+        const placeToken = document.getElementById('placeToken');
+
+        if (!codeMap[this.value]){
+            this.value = '';
+            placeToken.value = '';
+        }
+        else
+            placeToken.value = codeMap[this.value];
+    })
+  </script>
+</body>
+</html>
