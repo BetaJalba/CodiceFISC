@@ -24,12 +24,12 @@
       preg_match_all('/[BCDFGHJKLMNPQRSTVWXYZ]/', $surname, $cons);
       preg_match_all('/[AEIOU]/', $surname, $vocs);
 
-      $merged = array_merge($cons[0], $vocs[0]); // usa l'indice 0 per ottenere array piatto
+      $merged = array_merge($cons[0], $vocs[0]); // usa l'indice 0 per ottenere array
 
       return substr(implode('', $merged) . 'XXX', 0, 3);
     }
 
-    function CalcName(string $name): string {
+    function CalcName(string $name) {
       $name = strtoupper($name);
 
       // stessa cosa per nome
@@ -103,13 +103,10 @@
 
       for ($i = 0; $i < strlen($partial); $i++) {
           $ch = $partial[$i];
-          if (($i + 1) % 2 == 0) {
-              // posizione pari
-              $sum += $evenValues[$ch];
-          } else {
-              // posizione dispari
-              $sum += $oddValues[$ch];
-          }
+          if (($i + 1) % 2 == 0)
+            $sum += $evenValues[$ch];
+          else
+            $sum += $oddValues[$ch];
       }
 
       $remainder = $sum % 26;
